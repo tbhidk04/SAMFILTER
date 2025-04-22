@@ -2,9 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Layers of Time</title>
-  <link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layer Filter Viewer</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+
   <style>
     body, html {
       margin: 0;
@@ -73,10 +80,7 @@
     }
 
     startCamera();
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
   </script>
 </body>
 </html>
+
