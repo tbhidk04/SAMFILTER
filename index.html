@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Layer Filter Viewer</title>
-
   <link rel="manifest" href="manifest.json" />
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
   </script>
-
   <style>
     body, html {
       margin: 0;
@@ -21,13 +19,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
 
     #video {
       width: 100%;
       height: auto;
-      transform: scaleX(-1); /* selfie mode */
       filter: none;
+      object-fit: cover;
     }
 
     .controls {
@@ -43,11 +43,13 @@
       border: none;
       border-radius: 8px;
       background: white;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <video id="video" autoplay playsinline></video>
+
   <div class="controls">
     <button onclick="setFilter('none')">None</button>
     <button onclick="setFilter('red')">Red</button>
@@ -59,20 +61,26 @@
 
     async function startCamera() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { exact: "environment" } } // Back camera
+        });
         video.srcObject = stream;
       } catch (e) {
-        alert('Camera not accessible.');
+        alert('Could not access the back camera. Defaulting to front camera.');
+        const fallbackStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" }
+        });
+        video.srcObject = fallbackStream;
       }
     }
 
     function setFilter(color) {
       switch(color) {
         case 'red':
-          video.style.filter = 'sepia(1) hue-rotate(-50deg) saturate(8)';
+          video.style.filter = 'brightness(1.2) contrast(1.5) sepia(1) hue-rotate(-80deg) saturate(20)';
           break;
         case 'blue':
-          video.style.filter = 'sepia(1) hue-rotate(190deg) saturate(6)';
+          video.style.filter = 'brightness(1.2) contrast(1.5) sepia(1) hue-rotate(200deg) saturate(20)';
           break;
         default:
           video.style.filter = 'none';
@@ -83,4 +91,5 @@
   </script>
 </body>
 </html>
+
 
