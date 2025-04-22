@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Layers of Time</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #video {
+      width: 100%;
+      height: auto;
+      transform: scaleX(-1); /* selfie mode */
+      filter: none;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: white;
+    }
+  </style>
+</head>
+<body>
+  <video id="video" autoplay playsinline></video>
+  <div class="controls">
+    <button onclick="setFilter('none')">None</button>
+    <button onclick="setFilter('red')">Red</button>
+    <button onclick="setFilter('blue')">Blue</button>
+  </div>
+
+  <script>
+    const video = document.getElementById('video');
+
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+      } catch (e) {
+        alert('Camera not accessible.');
+      }
+    }
+
+    function setFilter(color) {
+      switch(color) {
+        case 'red':
+          video.style.filter = 'sepia(1) hue-rotate(-50deg) saturate(8)';
+          break;
+        case 'blue':
+          video.style.filter = 'sepia(1) hue-rotate(190deg) saturate(6)';
+          break;
+        default:
+          video.style.filter = 'none';
+      }
+    }
+
+    startCamera();
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>
