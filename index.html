@@ -19,14 +19,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
     }
 
     #video {
       width: 100%;
       height: auto;
-      object-fit: cover;
       filter: none;
     }
 
@@ -49,7 +46,6 @@
 </head>
 <body>
   <video id="video" autoplay playsinline></video>
-
   <div class="controls">
     <button onclick="setFilter('none')">None</button>
     <button onclick="setFilter('red')">Red</button>
@@ -62,25 +58,25 @@
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { exact: "environment" } }
+          video: {
+            facingMode: { ideal: "environment" } // back camera
+          }
         });
         video.srcObject = stream;
       } catch (e) {
-        alert('Could not access the back camera. Using front camera.');
-        const fallbackStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "user" }
-        });
-        video.srcObject = fallbackStream;
+        alert('Camera not accessible.');
       }
     }
 
     function setFilter(color) {
       switch(color) {
         case 'red':
-          video.style.filter = 'brightness(1.3) contrast(1.5) sepia(1) hue-rotate(-85deg) saturate(25)';
+          // Custom red filter
+          video.style.filter = 'brightness(1.2) contrast(1.5) sepia(1) hue-rotate(-60deg) saturate(8)';
           break;
         case 'blue':
-          video.style.filter = 'brightness(1.3) contrast(1.5) sepia(1) hue-rotate(190deg) saturate(25)';
+          // Custom blue filter
+          video.style.filter = 'brightness(1.2) contrast(1.5) sepia(1) hue-rotate(200deg) saturate(9)';
           break;
         default:
           video.style.filter = 'none';
